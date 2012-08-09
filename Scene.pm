@@ -14,6 +14,9 @@ sub new
 	# メンバ変数
 	my $scene = {};
 	
+	# ステートマシンの構築
+	#$scene->{Stage} = new Stage
+	
 	# パッケージ名とオブジェクト名を関連させる
 	bless $scene, $this;
 	
@@ -22,9 +25,19 @@ sub new
 
 sub draw
 {
-	main::glVertex2f( -0.5, 0.5 );
-	main::glVertex2f( -0.5, -0.5 );
-	main::glVertex2f( 0.9, 0 );
+	main::glVertex2f( 10.0, 10.0 );
+	main::glVertex2f( 50.0, 50.0 );
+	main::glVertex2f( 30.0, 70.0 );
+}
+
+sub update
+{
+}
+
+# 次のシーンに移行
+sub set_next_scene
+{
+	
 }
 
 1;
