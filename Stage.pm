@@ -1,9 +1,12 @@
 #!/usr/bin/perl
 
+package Stage;
+
 use strict;
 use OpenGL ':all';
 
-package Scene;
+use base qw(Scene);
+use NormalPlayer;
 
 # コンストラクタ
 sub new
@@ -12,16 +15,20 @@ sub new
 	my $this = shift;
 	
 	# メンバ変数
-	my $scene = {};
+	my $stage = {};
+	$stage->{player} = new NormalPlayer;
 	
 	# パッケージ名とオブジェクト名を関連させる
-	bless $scene, $this;
+	bless $stage, $this;
 	
-	return $scene;
+	return $stage;
 }
 
 sub draw
 {
+	my $this = shift;
+	
+	$this->{player}->draw();
 }
 
 sub update
@@ -31,6 +38,7 @@ sub update
 # 次のシーンに移行
 sub set_next_scene
 {
+	
 }
 
 1;

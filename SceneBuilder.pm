@@ -6,8 +6,10 @@ package SceneBuilder;
 
 use strict;
 use Scene;
+use Stage;
+use Readonly;
 
-use constant SCENE_STAGE	=> 1;
+Readonly our $SCENE_STAGE	=> 1;
 
 # コンストラクタ
 sub new
@@ -28,8 +30,13 @@ sub new
 # 次のシーンに移行
 sub create_scene
 {
+	my $this = shift;
+
 	my $next_scene = shift;
-	return new Scene;
+	
+	if( $next_scene == $SCENE_STAGE ){
+		return new Stage;
+	}
 }
 
 1;

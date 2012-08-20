@@ -3,7 +3,7 @@
 use strict;
 use OpenGL ':all';
 
-package Scene;
+package Player;
 
 # コンストラクタ
 sub new
@@ -20,16 +20,33 @@ sub new
 	return $scene;
 }
 
+# 描画
 sub draw
 {
 }
 
+# 更新
 sub update
 {
 }
 
-# 次のシーンに移行
-sub set_next_scene
+# X座標を取得する
+sub get_pos_x
+{
+}
+
+# Y座標を取得する
+sub get_pos_y
+{
+}
+
+# 幅を取得する
+sub get_width
+{
+}
+
+# 高さを取得する
+sub get_height
 {
 }
 
