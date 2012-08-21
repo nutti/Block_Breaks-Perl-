@@ -7,6 +7,7 @@ use Readonly;
 
 use SceneBuilder;
 use FPSManager;
+use InputManager;
 
 use constant APP_NAME				=> 'Block Breaks';		# ウィンドウ名
 Readonly my $WINDOW_INITIAL_POS_X	=> 100;					# ウィンドウの初期位置（X座標）
@@ -18,6 +19,10 @@ use constant WINDOW_HEIGHT			=> 480;					# ウィンドウの高さ
 our $scene_builder = new SceneBuilder;
 our $scene = $scene_builder->create_scene( $SceneBuilder::SCENE_STAGE );
 our $fps_manager = new FPSManager( 60 );
+our $input_manager = new InputManager();
+
+our @keys = ();
+$#keys = 256;
 
 # GLUTの初期化
 glutInit();
@@ -32,19 +37,26 @@ glutReshapeFunc( \&resize );
 # 画面描画に使用する関数を設定
 glutDisplayFunc( \&draw );
 glutIdleFunc( \&idle );
+# キーボード入力取得関数を設定
+glutKeyboardFunc( \&keyboard );
 # メッセージループ
 glutMainLoop();
 
+# キーボード入力取得関数
+sub keyboard
+{
+	# 入力されたキーコードを通知
+	my ( $key, $x, $y ) = @_;
+	$input_manager->notify_key_input( $key );
+}
 
 sub idle
 {
 	if( $fps_manager->has_elasped() == 1 ){
 		glutPostRedisplay();
-	#	print "hoge";
 	}
 	else{
 		Time::HiRes::sleep( 0.001 );
-	#	print "test";
 	}
 }
 
@@ -83,19 +95,23 @@ sub end_rendering
 	
 	# 更新
 	glutSwapBuffers();
+	
+	# キー入力の状態をクリア
+	$input_manager->clear();
 }
 
 our $count = 0;
 our @digit = ();
 
 
+# 描画関数
 sub draw
 {
 	# 描画開始
 	&begin_rendering;
 	
 	# シーンの更新
-	$scene->update();
+	$scene->update( $input_manager );
 	# シーンの描画
 	$scene->draw();
 	
@@ -107,14 +123,16 @@ sub draw
 		@digit[ 2 ] = $fps / 10;
 		@digit[ 1 ] = $fps % 10;
 	}
-	glRasterPos2f( 550.0, 440.0 );
-	glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 2 ] );
-	glRasterPos2f( 560.0, 440.0 );
-	glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 1 ] );
-	glRasterPos2f( 570.0, 440.0 );
-	glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord '.' );
-	glRasterPos2f( 580.0, 440.0 );
-	glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 0 ] );
+	if( $input_manager->is_pushed( 122 ) == 1 ){
+		glRasterPos2f( 550.0, 440.0 );
+		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 2 ] );
+		glRasterPos2f( 560.0, 440.0 );
+		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 1 ] );
+		glRasterPos2f( 570.0, 440.0 );
+		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord '.' );
+		glRasterPos2f( 580.0, 440.0 );
+		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 0 ] );
+	}
 	
 	# 描画終了
 	&end_rendering;

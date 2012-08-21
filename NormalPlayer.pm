@@ -46,6 +46,13 @@ sub draw
 # XV
 sub update
 {
+	my $this = shift;
+	my $input_manager = shift;
+
+	if( $input_manager->is_pushed( 122 ) == 1 ){
+		$this->{pos_x} += $VELOCITY;
+		
+	}
 }
 
 # XÀ•W‚ðŽæ“¾‚·‚é

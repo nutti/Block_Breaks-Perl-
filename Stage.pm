@@ -33,6 +33,10 @@ sub draw
 
 sub update
 {
+	my $this = shift;
+	my $input_manager = shift;
+	
+	$this->{player}->update( $input_manager );
 }
 
 # Ÿ‚ÌƒV[ƒ“‚ÉˆÚs
