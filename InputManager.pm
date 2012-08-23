@@ -15,6 +15,8 @@ sub new
 	my @keys = ();
 	$#keys = 256;
 	$input_manager->{keys} = \@keys;
+	$input_manager->{mouse_pos_x} = 0;
+	$input_manager->{mouse_pos_y} = 0;
 	
 	# パッケージ名とオブジェクト名を関連させる
 	bless $input_manager, $this;
@@ -30,6 +32,18 @@ sub notify_key_input
 	
 	@{$this->{keys}}[ $code ] = 1;
 }
+
+# マウスが入力されたことを通知
+sub notify_mouse_input
+{
+	my $this = shift;
+	my $x = shift;
+	my $y = shift;
+	
+	$this->{mouse_pos_x} = $x;
+	$this->{mouse_pos_y} = $y;
+}
+
 
 # キーが押されているか？
 sub is_pushed
@@ -57,5 +71,22 @@ sub get_key_state
 	
 	return @{$this->{keys}};
 }
+
+# マウスのX成分の移動量を得る
+sub get_mouse_pos_x
+{
+	my $this = shift;
+	
+	return $this->{mouse_pos_x};
+}
+
+# マウスのY成分の移動量を得る
+sub get_mouse_pos_y
+{
+	my $this = shift;
+	
+	return $this->{mouse_pos_y};
+}
+
 
 1;

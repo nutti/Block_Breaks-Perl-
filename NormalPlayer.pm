@@ -6,7 +6,7 @@ use strict;
 use OpenGL ':all';
 use Readonly;
 
-use base qw(Player);
+use base qw(Player CollisionObj);
 
 Readonly my $POSITION_Y		=> 400;		# Y座標（固定）
 Readonly my $WIDTH			=> 30;		# 横幅
@@ -34,9 +34,9 @@ sub draw
 {
 	my $this = shift;
 
-	glColor3f( 1.0, 1.0, 0 );
+	glColor3f( 1.0, 1.0, 0.0 );
 	glBegin( GL_LINE_LOOP );
-	glVertex2f( $this->{pos_x}, $POSITION_Y );
+	glVertex2f( $this->{pos_x} - 1, $POSITION_Y );
 	glVertex2f( $this->{pos_x} + $WIDTH, $POSITION_Y );
 	glVertex2f( $this->{pos_x} + $WIDTH, $POSITION_Y + $HEIGHT );
 	glVertex2f( $this->{pos_x}, $POSITION_Y + $HEIGHT );
@@ -49,30 +49,37 @@ sub update
 	my $this = shift;
 	my $input_manager = shift;
 
-	if( $input_manager->is_pushed( 122 ) == 1 ){
-		$this->{pos_x} += $VELOCITY;
-		
-	}
+	$this->{pos_x} = $input_manager->get_mouse_pos_x();
 }
 
 # X座標を取得する
 sub get_pos_x
 {
+	my $this = shift;
+	
+	return $this->{pos_x};
 }
 
 # Y座標を取得する
 sub get_pos_y
 {
+	my $this = shift;
+	
+	return $POSITION_Y;
 }
 
 # 幅を取得する
 sub get_width
 {
+	my $this = shift;
+	
+	return $WIDTH;
 }
 
 # 高さを取得する
 sub get_height
 {
+	return $HEIGHT;
 }
 
 1;

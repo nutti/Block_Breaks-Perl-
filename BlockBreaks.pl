@@ -39,6 +39,8 @@ glutDisplayFunc( \&draw );
 glutIdleFunc( \&idle );
 # キーボード入力取得関数を設定
 glutKeyboardFunc( \&keyboard );
+# マウス入力取得関数を設定
+glutPassiveMotionFunc( \&mouse );
 # メッセージループ
 glutMainLoop();
 
@@ -50,13 +52,21 @@ sub keyboard
 	$input_manager->notify_key_input( $key );
 }
 
+# マウス入力取得関数
+sub mouse
+{
+	# 入力されたマウスの状態を通知
+	my ( $x, $y ) = @_;
+	$input_manager->notify_mouse_input( $x, $y );
+}
+
 sub idle
 {
 	if( $fps_manager->has_elasped() == 1 ){
 		glutPostRedisplay();
 	}
 	else{
-		Time::HiRes::sleep( 0.001 );
+		Time::HiRes::sleep( 0.01 );
 	}
 }
 
