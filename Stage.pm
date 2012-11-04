@@ -9,6 +9,9 @@ use base qw(Scene);
 use NormalPlayer;
 use NormalBall;
 
+
+use NormalBlock;
+
 # コンストラクタ
 sub new
 {
@@ -19,6 +22,7 @@ sub new
 	my $stage = {};
 	$stage->{player} = new NormalPlayer;
 	$stage->{ball} = new NormalBall;
+	$stage->{block} = new NormalBlock( 3, 3 );
 	
 	# パッケージ名とオブジェクト名を関連させる
 	bless $stage, $this;
@@ -32,6 +36,7 @@ sub draw
 	
 	$this->{player}->draw();
 	$this->{ball}->draw();
+	$this->{block}->draw();
 }
 
 sub update
@@ -41,7 +46,7 @@ sub update
 	
 	$this->{player}->update( $input_manager );
 	$this->{ball}->update();
-	if( $this->{player}->is_collided( $this->{ball} ) ){
+	if( $this->{ball}->is_collided( $this->{player} ) ){
 		$this->{ball}->process_collision_with_player();
 	}
 }
