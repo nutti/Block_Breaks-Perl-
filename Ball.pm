@@ -55,5 +55,10 @@ sub collision_with_player
 {
 }
 
+# ƒuƒƒbƒN‚Æ‚ÌÕ“Ë”»’è
+sub collision_with_block
+{
+}
+
 
 1;

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package NormalBlock;
+package FragileBlock;
 
 use strict;
 use OpenGL ':all';
@@ -23,7 +23,7 @@ sub new
 	$block->{pos_x} = ( $Block::WIDTH + $Block::INTERVAL_X ) * $row + $Block::OFFSET_X;
 	$block->{pos_y} = ( $Block::HEIGHT + $Block::INTERVAL_Y ) * $column + $Block::OFFSET_Y;
 	$block->{destroyed} = $Util::FALSE;
-	$block->{penetrate} = $Util::FALSE;
+	$block->{penetrate} = $Util::TRUE;
 	$block->{score} = 10;
 	
 	
@@ -39,7 +39,7 @@ sub draw
 	my $this = shift;
 	
 	if( $this->{destroyed} == $Util::FALSE ){
-		glColor3f( 0.0, 1.0, 0.0 );
+		glColor3f( 1.0, 1.0, 0.0 );
 		glBegin( GL_LINE_LOOP );
 		glVertex2f( $this->{pos_x} - 1, $this->{pos_y} );
 		glVertex2f( $this->{pos_x} + $Block::WIDTH, $this->{pos_y} );

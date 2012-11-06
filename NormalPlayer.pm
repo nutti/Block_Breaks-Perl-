@@ -50,6 +50,12 @@ sub update
 	my $input_manager = shift;
 
 	$this->{pos_x} = $input_manager->get_mouse_pos_x();
+	if( $this->{pos_x} > 480 - $WIDTH ){
+		$this->{pos_x} = 480 - $WIDTH;
+	}
+	elsif( $this->{pos_x} < 10 ){
+		$this->{pos_x} = 10;
+	}
 }
 
 # XÀ•W‚ðŽæ“¾‚·‚é

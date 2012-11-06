@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package NormalBlock;
+package BlankBlock;
 
 use strict;
 use OpenGL ':all';
@@ -22,9 +22,9 @@ sub new
 	my $block = {};
 	$block->{pos_x} = ( $Block::WIDTH + $Block::INTERVAL_X ) * $row + $Block::OFFSET_X;
 	$block->{pos_y} = ( $Block::HEIGHT + $Block::INTERVAL_Y ) * $column + $Block::OFFSET_Y;
-	$block->{destroyed} = $Util::FALSE;
-	$block->{penetrate} = $Util::FALSE;
-	$block->{score} = 10;
+	$block->{destroyed} = $Util::TRUE;
+	$block->{penetrate} = $Util::TRUE;
+	$block->{score} = 0;
 	
 	
 	# パッケージ名とオブジェクト名を関連させる
@@ -36,17 +36,6 @@ sub new
 # 描画
 sub draw
 {
-	my $this = shift;
-	
-	if( $this->{destroyed} == $Util::FALSE ){
-		glColor3f( 0.0, 1.0, 0.0 );
-		glBegin( GL_LINE_LOOP );
-		glVertex2f( $this->{pos_x} - 1, $this->{pos_y} );
-		glVertex2f( $this->{pos_x} + $Block::WIDTH, $this->{pos_y} );
-		glVertex2f( $this->{pos_x} + $Block::WIDTH, $this->{pos_y} + $Block::HEIGHT );
-		glVertex2f( $this->{pos_x}, $this->{pos_y} + $Block::HEIGHT );
-		glEnd();
-	}
 }
 
 # 更新
@@ -57,33 +46,21 @@ sub update
 # X座標を取得する
 sub get_pos_x
 {
-	my $this = shift;
-	
-	return $this->{pos_x};
 }
 
 # Y座標を取得する
 sub get_pos_y
 {
-	my $this = shift;
-	
-	return $this->{pos_y};
 }
 
 # 幅を取得する
 sub get_width
 {
-	my $this = shift;
-	
-	return $Block::WIDTH;
 }
 
 # 高さを取得する
 sub get_height
 {
-	my $this = shift;
-	
-	return $Block::HEIGHT;
 }
 
 # 破壊されたか
@@ -105,9 +82,6 @@ sub penetrate
 # ボールと衝突した時の処理
 sub process_collision_with_ball
 {
-	my $this = shift;
-	
-	$this->{destroyed} = $Util::TRUE;
 }
 
 # 得点を取得

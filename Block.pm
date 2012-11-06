@@ -7,7 +7,7 @@ use OpenGL ':all';
 use Readonly;
 
 Readonly our $OFFSET_X		=> 50;	# ブロックの最左端
-Readonly our $OFFSET_Y		=> 50;	# ブロックの最上端
+Readonly our $OFFSET_Y		=> 30;	# ブロックの最上端
 Readonly our $WIDTH			=> 25;	# ブロックの幅
 Readonly our $HEIGHT			=> 15;	# ブロックの高さ
 Readonly our $INTERVAL_X		=> 5;	# ブロック間の幅
@@ -71,8 +71,10 @@ sub penetrate
 # ボールと衝突した時の処理
 sub process_collision_with_ball
 {
-}# ボールと衝突した時の処理
-sub process_collision_with_ball
+}
+
+# スコアを取得
+sub get_score
 {
 }
 

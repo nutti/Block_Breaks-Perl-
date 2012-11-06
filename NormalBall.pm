@@ -51,7 +51,7 @@ sub update
 	
 	$this->{pos_x} += $this->{vel_x};
 	$this->{pos_y} += $this->{vel_y};
-	if( $this->{pos_x} > 480 ){
+	if( $this->{pos_x} > 480 - $BALL_WIDTH ){
 		$this->{vel_x} = -1;
 	}
 	elsif( $this->{pos_x} < 10 ){
@@ -99,6 +99,14 @@ sub get_height
 
 # プレイヤーとの衝突
 sub process_collision_with_player
+{
+	my $this = shift;
+	
+	$this->{vel_y} = -$this->{vel_y};
+}
+
+# ブロックとの衝突
+sub process_collision_with_block
 {
 	my $this = shift;
 	
