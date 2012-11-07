@@ -41,6 +41,7 @@ glutIdleFunc( \&idle );
 glutKeyboardFunc( \&keyboard );
 # マウス入力取得関数を設定
 glutPassiveMotionFunc( \&mouse );
+glutMouseFunc( \&mouse_click );
 # メッセージループ
 glutMainLoop();
 
@@ -60,13 +61,21 @@ sub mouse
 	$input_manager->notify_mouse_input( $x, $y );
 }
 
+# マウス入力取得関数（クリック）
+sub mouse_click
+{
+	# クリックを検知
+	my $button = $_[ 0 ];
+	$input_manager->notify_mouse_click( $button );
+}
+
 sub idle
 {
 	if( $fps_manager->has_elasped() == 1 ){
 		glutPostRedisplay();
 	}
 	else{
-		Time::HiRes::sleep( 0.01 );
+		Time::HiRes::sleep( 0.017 );
 	}
 }
 
@@ -143,6 +152,9 @@ sub draw
 		glRasterPos2f( 580.0, 440.0 );
 		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord $digit[ 0 ] );
 	}
+	
+	# 入力をクリア
+	$input_manager->clear();
 	
 	# 描画終了
 	&end_rendering;

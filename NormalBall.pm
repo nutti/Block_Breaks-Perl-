@@ -5,6 +5,9 @@ package NormalBall;
 use strict;
 use OpenGL ':all';
 use Readonly;
+use Util;
+
+use Player;
 
 use base qw(Ball CollisionObj);
 
@@ -21,8 +24,9 @@ sub new
 	my $normal_ball = {};
 	$normal_ball->{pos_x} = 200;
 	$normal_ball->{pos_y} = 200;
-	$normal_ball->{vel_x} = 1;
-	$normal_ball->{vel_y} = 1;
+	$normal_ball->{vel_x} = 1.0;
+	$normal_ball->{vel_y} = -1.0;
+	$normal_ball->{attached} = $Util::TRUE;
 	
 	# パッケージ名とオブジェクト名を関連させる
 	bless $normal_ball, $this;
@@ -48,20 +52,34 @@ sub draw
 sub update
 {
 	my $this = shift;
+	my $player = shift;
+	my $input_manager = shift;
 	
-	$this->{pos_x} += $this->{vel_x};
-	$this->{pos_y} += $this->{vel_y};
-	if( $this->{pos_x} > 480 - $BALL_WIDTH ){
-		$this->{vel_x} = -1;
+	if( $input_manager->is_mouse_left_clicked() ){
+		$this->{attached} = $Util::FALSE;
 	}
-	elsif( $this->{pos_x} < 10 ){
-		$this->{vel_x} = 1;
+	
+	if( !$this->{attached} ){
+		$this->{pos_x} += $this->{vel_x};
+		$this->{pos_y} += $this->{vel_y};
+		if( $this->{pos_x} > 480 - $BALL_WIDTH ){
+			$this->{vel_x} = -1.0;
+		}
+		elsif( $this->{pos_x} < 10 ){
+			$this->{vel_x} = 1.0;
+		}
+		if( $this->{pos_y} < 10 ){
+			$this->{vel_y} = 1.0;
+		}
+		elsif( $this->{pos_y} > 460 ){
+			$this->{vel_x} = 1.0;
+			$this->{vel_y} = -1.0;
+			$this->{attached} = $Util::TRUE;
+		}
 	}
-	if( $this->{pos_y} < 10 ){
-		$this->{vel_y} = 1;
-	}
-	elsif( $this->{pos_y} > 460 ){
-		$this->{vel_y} = -1;
+	else{
+		$this->{pos_x} = $player->get_pos_x() + 15;
+		$this->{pos_y} = $player->get_pos_y() - 5;
 	}
 }
 
@@ -109,8 +127,20 @@ sub process_collision_with_player
 sub process_collision_with_block
 {
 	my $this = shift;
+	my $side = shift;
 	
-	$this->{vel_y} = -$this->{vel_y};
+	if( ( $side & $CollisionObj::INTERSECT_TOP ) && ( $side & $CollisionObj::INTERSECT_BOTTOM ) ){
+		$this->{vel_y} = $this->{vel_y};
+	}
+	elsif( ( $side & $CollisionObj::INTERSECT_TOP ) || ( $side & $CollisionObj::INTERSECT_BOTTOM ) ){
+		$this->{vel_y} = -$this->{vel_y}
+	}
+	if( ( $side & $CollisionObj::INTERSECT_RIGHT ) && ( $side & $CollisionObj::INTERSECT_LEFT ) ){
+		$this->{vel_x} = $this->{vel_x};
+	}
+	elsif( ( $side & $CollisionObj::INTERSECT_RIGHT ) || ( $side & $CollisionObj::INTERSECT_LEFT ) ){
+		$this->{vel_x} = -$this->{vel_x};
+	}
 }
 
 1;

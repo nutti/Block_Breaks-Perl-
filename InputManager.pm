@@ -17,6 +17,7 @@ sub new
 	$input_manager->{keys} = \@keys;
 	$input_manager->{mouse_pos_x} = 0;
 	$input_manager->{mouse_pos_y} = 0;
+	$input_manager->{button} = 200;
 	
 	# パッケージ名とオブジェクト名を関連させる
 	bless $input_manager, $this;
@@ -44,6 +45,23 @@ sub notify_mouse_input
 	$this->{mouse_pos_y} = $y;
 }
 
+# マウスがクリックされたことを通知
+sub notify_mouse_click
+{
+	my $this = shift;
+	my $button = shift;
+	
+	$this->{button} = $button;
+}
+
+# 左側のマウスがクリックされたか？
+sub is_mouse_left_clicked
+{
+	my $this = shift;
+	
+	return $this->{button} == 0;
+}
+
 
 # キーが押されているか？
 sub is_pushed
@@ -62,6 +80,8 @@ sub clear
 	for( my $i = 0; $i < 256; ++$i ){
 		@{$this->{keys}}[ $i ] = 0;
 	}
+	
+	$this->{button} = 200;
 }
 
 # キーの状態を得る

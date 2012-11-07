@@ -8,6 +8,8 @@ use OpenGL ':all';
 use BlankBlock;
 use NormalBlock;
 use FragileBlock;
+use UnbreakableBlock;
+use StrongBlock;
 
 # コンストラクタ
 sub new
@@ -44,6 +46,12 @@ sub new
 		}
 		elsif( $block_pattern[ $cnt ] == 2 ){
 			$i = new FragileBlock( $cnt % 13, int( $cnt / 13 ) );
+		}
+		elsif( $block_pattern[ $cnt ] == 3 ){
+			$i = new UnbreakableBlock( $cnt % 13, int( $cnt / 13 ) );
+		}
+		elsif( $block_pattern[ $cnt ] >= 4 ){
+			$i = new StrongBlock( $cnt % 13, int( $cnt / 13 ), $block_pattern[ $cnt ] - 3 );
 		}
 		else{
 			$i = new BlankBlock( $cnt % 13, int( $cnt / 13 ) );
@@ -83,10 +91,11 @@ sub collision
 	
 	foreach my $i ( @{$this->{blocks}} ){
 		if( !$i->destroyed() ){
-			if( $i->is_collided( $ball ) ){
+			my $side = $i->is_collided( $ball );
+			if( $side ){
 				$i->process_collision_with_ball();
 				if( !$i->penetrate() ){
-					$ball->process_collision_with_block();
+					$ball->process_collision_with_block( $side );
 				}
 				$$score += $i->get_score();
 			}

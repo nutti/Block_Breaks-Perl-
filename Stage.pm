@@ -47,8 +47,8 @@ sub draw
 	
 	my $score = $this->{score};
 	for( my $i = 0; $score != 0; --$i ){
-		glRasterPos2f( 600.0 + $i * 18, 100.0 );
-		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, ord ( $score % 10 ) );
+		glRasterPos2f( 600.0 + $i * 12, 100.0 );
+		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, ord ( $score % 10 ) );
 		$score = int( $score / 10 );
 	}
 }
@@ -59,7 +59,7 @@ sub update
 	my $input_manager = shift;
 	
 	$this->{player}->update( $input_manager );
-	$this->{ball}->update();
+	$this->{ball}->update( $this->{player}, $input_manager );
 	if( $this->{ball}->is_collided( $this->{player} ) ){
 		$this->{ball}->process_collision_with_player();
 	}

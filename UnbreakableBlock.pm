@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package FragileBlock;
+package UnbreakableBlock;
 
 use strict;
 use OpenGL ':all';
@@ -23,8 +23,8 @@ sub new
 	$block->{pos_x} = ( $Block::WIDTH + $Block::INTERVAL_X ) * $row + $Block::OFFSET_X;
 	$block->{pos_y} = ( $Block::HEIGHT + $Block::INTERVAL_Y ) * $column + $Block::OFFSET_Y;
 	$block->{destroyed} = $Util::FALSE;
-	$block->{penetrate} = $Util::TRUE;
-	$block->{score} = 10;
+	$block->{penetrate} = $Util::FALSE;
+	$block->{score} = 0;
 	
 	
 	# パッケージ名とオブジェクト名を関連させる
@@ -39,7 +39,7 @@ sub draw
 	my $this = shift;
 	
 	if( $this->{destroyed} == $Util::FALSE ){
-		glColor3f( 0.0, 1.0, 1.0 );
+		glColor3f( 0.7, 0.7, 0.7 );
 		glBegin( GL_LINE_LOOP );
 		glVertex2f( $this->{pos_x} - 1, $this->{pos_y} );
 		glVertex2f( $this->{pos_x} + $Block::WIDTH, $this->{pos_y} );
@@ -105,9 +105,6 @@ sub penetrate
 # ボールと衝突した時の処理
 sub process_collision_with_ball
 {
-	my $this = shift;
-	
-	$this->{destroyed} = $Util::TRUE;
 }
 
 # 得点を取得

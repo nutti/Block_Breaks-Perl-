@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package FragileBlock;
+package StrongBlock;
 
 use strict;
 use OpenGL ':all';
@@ -23,8 +23,9 @@ sub new
 	$block->{pos_x} = ( $Block::WIDTH + $Block::INTERVAL_X ) * $row + $Block::OFFSET_X;
 	$block->{pos_y} = ( $Block::HEIGHT + $Block::INTERVAL_Y ) * $column + $Block::OFFSET_Y;
 	$block->{destroyed} = $Util::FALSE;
-	$block->{penetrate} = $Util::TRUE;
-	$block->{score} = 10;
+	$block->{penetrate} = $Util::FALSE;
+	$block->{score} = 100;
+	$block->{durability} = shift;
 	
 	
 	# パッケージ名とオブジェクト名を関連させる
@@ -39,13 +40,15 @@ sub draw
 	my $this = shift;
 	
 	if( $this->{destroyed} == $Util::FALSE ){
-		glColor3f( 0.0, 1.0, 1.0 );
+		glColor3f( 1.0, 0.0, 0.0 );
 		glBegin( GL_LINE_LOOP );
 		glVertex2f( $this->{pos_x} - 1, $this->{pos_y} );
 		glVertex2f( $this->{pos_x} + $Block::WIDTH, $this->{pos_y} );
 		glVertex2f( $this->{pos_x} + $Block::WIDTH, $this->{pos_y} + $Block::HEIGHT );
 		glVertex2f( $this->{pos_x}, $this->{pos_y} + $Block::HEIGHT );
 		glEnd();
+		glRasterPos2f( $this->{pos_x} + 9.0, $this->{pos_y} + 10.5 );
+		glutBitmapCharacter( GLUT_BITMAP_HELVETICA_10, ord ( $this->{durability} ) );
 	}
 }
 
@@ -107,7 +110,10 @@ sub process_collision_with_ball
 {
 	my $this = shift;
 	
-	$this->{destroyed} = $Util::TRUE;
+	--$this->{durability};
+	if( $this->{durability} <= 0 ){
+		$this->{destroyed} = $Util::TRUE;
+	}
 }
 
 # 得点を取得
@@ -115,7 +121,12 @@ sub get_score
 {
 	my $this = shift;
 	
-	return $this->{score};
+	if( $this->{durability} <= 0 ){
+		return $this->{score};
+	}
+	else{
+		return 1;
+	}
 }
 
 1;
